@@ -18,6 +18,8 @@ function parseData() {
 
 	if (this.readyState == 4 && this.status == 200) {
 
+		alert("reached");
+
 		var message = JSON.parse(this.responseText);
 
 		message_list = document.getElementById("messages");
