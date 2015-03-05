@@ -12,9 +12,13 @@ function parse() {
     // step 4: execute the request
     request.send();
 
+    console.log(request);
+
 }
 
 function parseData(request) {
+
+	console.log(request);
 
 	if (request.readyState == 4 && request.status == 200) {
 
