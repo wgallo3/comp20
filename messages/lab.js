@@ -16,7 +16,7 @@ function parse() {
 
 function parseData() {
 
-	var message = JSON.parse(reqest);
+	var message = JSON.parse(request);
 
 	message_list = document.getElementById("messages");
 				
