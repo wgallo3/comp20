@@ -1,4 +1,10 @@
-#message {
+#messages {
+
+	font-family: Helvetica;
+	font-size: 30px;
+}
+
+.message {
 
 	font-family: Helvetica;
 	font-size: 20px;

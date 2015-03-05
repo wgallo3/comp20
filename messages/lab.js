@@ -1,7 +1,7 @@
 function parse() {
     
     // step 1: create an instance of the object
-    request = new XMLHttpRequest();
+    var request = new XMLHttpRequest();
 
     // step 2: create or "open" HTTP request
     request.open("GET", "data.json", true);
@@ -18,7 +18,8 @@ function parseData() {
 
 	var message = JSON.parse();
 
-	message_list = document.getElementById("content");
+	message_list = document.getElementById("messages");
 				
 	message_list.innerHTML += '<p class="message">' + message['content'] + " " + message['username'] + "</p>";
+
 }
