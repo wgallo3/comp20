@@ -16,10 +16,18 @@ function parse() {
 
 function parseData() {
 
-	var message = JSON.parse(this.responseText);
+	if (this.readyState == 4 && this.status == 200) {
 
-	message_list = document.getElementById("messages");
-				
-	message_list.innerHTML += '<p class="message">' + message['content'] + " " + message['username'] + "</p>";
+		var message = JSON.parse(this.responseText);
+
+		message_list = document.getElementById("messages");
+
+		for (int i = 0; i < message_list.length; i++) {
+
+			message_list.innerHTML += '<p class="message">' + message[i]['content'] + ' ' + message[i]['username'] + '</p>';
+
+		}
+		
+	}
 
 }
