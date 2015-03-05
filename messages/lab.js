@@ -17,7 +17,7 @@ function parse() {
 
 function parseData(request) {
 
-	if (request.readyState == 4 && request.status == 200) {
+	// if (request.readyState == 4 && request.status == 200) {
 
 		var message = JSON.parse(request.responseText);
 
@@ -29,6 +29,6 @@ function parseData(request) {
 
 		}
 		
-	}
+	// }
 
 }
