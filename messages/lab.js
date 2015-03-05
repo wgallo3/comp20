@@ -7,14 +7,14 @@ function parse() {
     request.open("GET", "data.json", true);
 
     // step 3: set up way to manage response - to a function
-    request.onreadystatechange = parseData;
+    request.onreadystatechange = parseData(request);
 
     // step 4: execute the request
     request.send();
 
 }
 
-function parseData() {
+function parseData(var request) {
 
 	if (request.readyState == 4 && request.status == 200) {
 
