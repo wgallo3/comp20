@@ -7,36 +7,37 @@ function parse() {
     request.open("GET", "data.json", true);
 
     // step 3: set up way to manage response - to a function
-    request.onreadystatechange = parseData(request);
+    request.onreadystatechange = parseData;
 
     // step 4: execute the request
     request.send();
 
-}
 
-function parseData(request) {
+	function parseData() {
 
-	console.log(request);
-	console.log(request.readyState);
-	console.log(request.status);
-	console.log(request);
+		console.log(request);
+		console.log(request.readyState);
+		console.log(request.status);
+		console.log(request);
 
-	if (request.readyState == 4 && request.status == 200) {
+		if (request.readyState == 4 && request.status == 200) {
 
-		console.log('here');
+			console.log('here');
 
-		var message = JSON.parse(request.responseText);
+			var message = JSON.parse(request.responseText);
 
-		message_list = document.getElementById("messages");
+			message_list = document.getElementById("messages");
 
-		console.log(message_list.length);
+			console.log(message_list.length);
 
-		for (var i = 0; i < message.length; i++) {
+			for (var i = 0; i < message.length; i++) {
 
-			message_list.innerHTML += '<p class="message">' + message[i]['content'] + ' ' + message[i]['username'] + '</p>';
+				message_list.innerHTML += '<p class="message">' + message[i]['content'] + ' ' + message[i]['username'] + '</p>';
 
+			}
+			
 		}
-		
+
 	}
 
 }
