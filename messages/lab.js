@@ -12,24 +12,23 @@ function parse() {
     // step 4: execute the request
     request.send();
 
-    function parseData() {
-
-		if (request.readyState == 4 && request.status == 200) {
-
-			var message = JSON.parse(request.responseText);
-
-			message_list = document.getElementById("messages");
-
-			for (var i = 0; i < message.length; i++) {
-
-				message_list.innerHTML += '<p class="message">' + message[i]['content'] + ' ' + message[i]['username'] + '</p>';
-
-			}
-			
-		}
-
-	}
-
 }
 
+function parseData() {
+
+    if (request.readyState == 4 && request.status == 200) {
+
+        message = JSON.parse(request.responseText);
+
+        message_list = document.getElementById("messages");
+
+        for (i = 0; i < message.length; i++) {
+
+            message_list.innerHTML += '<p class="message">' + message[i]['content'] + ' ' + message[i]['username'] + '</p>';
+
+        }
+        
+    }
+
+}
 
