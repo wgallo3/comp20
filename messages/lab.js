@@ -30,7 +30,7 @@ function parseData(request) {
 
 		console.log(message_list.length);
 
-		for (var i = 0; i < message_list.length; i++) {
+		for (var i = 0; i < message.length; i++) {
 
 			message_list.innerHTML += '<p class="message">' + message[i]['content'] + ' ' + message[i]['username'] + '</p>';
 
