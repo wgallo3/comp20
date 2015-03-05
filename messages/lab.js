@@ -12,23 +12,13 @@ function parse() {
     // step 4: execute the request
     request.send();
 
-
 	function parseData() {
 
-		console.log(request);
-		console.log(request.readyState);
-		console.log(request.status);
-		console.log(request);
-
 		if (request.readyState == 4 && request.status == 200) {
-
-			console.log('here');
 
 			var message = JSON.parse(request.responseText);
 
 			message_list = document.getElementById("messages");
-
-			console.log(message_list.length);
 
 			for (var i = 0; i < message.length; i++) {
 
