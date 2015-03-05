@@ -19,6 +19,7 @@ function parseData(request) {
 	console.log(request);
 	console.log(request.readyState);
 	console.log(request.status);
+	console.log(request);
 
 	if (request.readyState == 4 && request.status == 200) {
 
