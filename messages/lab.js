@@ -18,11 +18,11 @@ function parseData() {
 
 	if (this.readyState == 4 && this.status == 200) {
 
-		alert("reached");
-
 		var message = JSON.parse(this.responseText);
 
 		message_list = document.getElementById("messages");
+
+		console.log(message_list.length);
 
 		for (var i = 0; i < message_list.length; i++) {
 
