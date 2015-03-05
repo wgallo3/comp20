@@ -22,7 +22,7 @@ function parseData() {
 
 		message_list = document.getElementById("messages");
 
-		for (int i = 0; i < message_list.length; i++) {
+		for (var i = 0; i < message_list.length; i++) {
 
 			message_list.innerHTML += '<p class="message">' + message[i]['content'] + ' ' + message[i]['username'] + '</p>';
 
