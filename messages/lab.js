@@ -7,7 +7,7 @@ function parse() {
     request.open("GET", "data.json", true);
 
     // step 3: set up way to manage response - to a function
-    request.onreadystatechange = parseData(request);
+    request.onreadystatechange = parseData;
 
     // step 4: execute the request
     request.send();
