@@ -16,6 +16,7 @@ function parse() {
 
 function parseData(request) {
 
+	console.log(request);
 	console.log(request.readyState);
 	console.log(request.status);
 
