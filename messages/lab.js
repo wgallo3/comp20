@@ -21,4 +21,5 @@ function parseData() {
 	message_list = document.getElementById("messages").value;
 	
 	message_list.innerHTML += '<p class="message">' + message_to_add['content'] + " " + message_to_add['username'] "</p>";
+	
 }
