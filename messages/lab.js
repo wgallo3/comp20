@@ -16,9 +16,9 @@ function parse() {
 
 function parseData() {
 
-	if (this.readyState == 4 && this.status == 200) {
+	if (request.readyState == 4 && request.status == 200) {
 
-		var message = JSON.parse(this.responseText);
+		var message = JSON.parse(request.responseText);
 
 		message_list = document.getElementById("messages");
 
