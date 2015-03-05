@@ -7,18 +7,22 @@ function parse() {
     request.open("GET", "data.json", true);
 
     // step 3: set up way to manage response - to a function
-    request.onreadystatechange = parseData(request);
+    request.onreadystatechange = parseData();
 
     // step 4: execute the request
     request.send();
 
+    console.log(request);
+
 }
 
-function parseData(var request) {
+function parseData() {
 
-	if (request.readyState == 4 && request.status == 200) {
+	console.log(this);
 
-		var message = JSON.parse(request.responseText);
+	if (this.readyState == 4 && this.status == 200) {
+
+		var message = JSON.parse(this.responseText);
 
 		message_list = document.getElementById("messages");
 
