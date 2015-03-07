@@ -14,8 +14,8 @@
 
 		var request = new XMLHttpRequest();
 
-		myLat = 0;
-		myLng = 0;
+		var myLat = 0;
+		var myLng = 0;
 		var myLocation = new google.maps.LatLng(myLat, myLng);
 		
 		var map_settings = {
@@ -50,6 +50,10 @@
 		{	
 			myLocation = new google.maps.LatLng(myLat, myLng);
 			infowindow = new google.maps.InfoWindow();
+
+			console.log(myLat);
+			console.log(myLng);
+			console.log(myLocation);
 
 			map.panTo(myLocation);
 
