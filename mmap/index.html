@@ -41,13 +41,13 @@
 					myLat = position.coords.latitude;
 					myLng = position.coords.longitude;
 				});
+
+				console.log(myLat);
+				console.log(myLng);
+				console.log(myLocation);
 			} else {
 				alert("Geolocation is not supported by your browser!");
 			}
-
-			console.log(myLat);
-			console.log(myLng);
-			console.log(myLocation);
 		}
 
 		function drawMap()
