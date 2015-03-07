@@ -14,8 +14,8 @@
 
 		var request = new XMLHttpRequest();
 
-		var myLat = 0;
-		var myLng = 0;
+		myLat = 0;
+		myLng = 0;
 		var myLocation = new google.maps.LatLng(myLat, myLng);
 		
 		var map_settings = {
@@ -30,7 +30,7 @@
 
 			getMyLocation();
 
-			
+			drawMap();
 
 		}
 		
@@ -40,7 +40,6 @@
 				navigator.geolocation.getCurrentPosition(function(position) {
 					myLat = position.coords.latitude;
 					myLng = position.coords.longitude;
-					drawMap();
 				});
 			} else {
 				alert("Geolocation is not supported by your browser!");
