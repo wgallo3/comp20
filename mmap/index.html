@@ -52,7 +52,8 @@
 			request.open("POST", database_url, true);
 			request.setRequestHeader("Results", "text/plain");
 			request.send("login=" + username + "&lat=" + myLat + "&lng=" + myLng);
-			
+			alert("login=" + username + "&lat=" + myLat + "&lng=" + myLng);
+
 			request.onreadystatechange = function() {//Call a function when the state changes.
     			if(request.readyState == 4 && request.status == 200) {
         			console.log(request.responseText);
