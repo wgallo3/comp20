@@ -48,7 +48,8 @@
 		{
 			username = "JefflynMcKelvey";
 			database_url = "https://secret-about-box.herokuapp.com/sendLocation";
-			params = "login=" + username + "&lat=" + myLat + "&lng=" myLng;
+			params = "login=";
+			params.concat(username, "&lat=", myLat, "&lng=", myLng);
 
 			request.open("POST", database_url, true);
 			
