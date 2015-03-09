@@ -14,9 +14,13 @@
 
 		var request = new XMLHttpRequest();
 
+		var myLat = 0;
+		var myLng = 0;
+		var myLocation = new google.maps.LatLng(myLat, myLng);
+		
 		var map_settings = {
 								zoom: 13,
-								center: me,
+								center: myLocation,
 								mapTypeId: google.maps.MapTypeId.ROADMAP
 						   };
 
@@ -65,6 +69,8 @@
 			infowindow = new google.maps.InfoWindow();
 
 			map.panTo(me);
+
+			map.panTo(myLocation);
 
 			marker = new google.maps.Marker({
 				position: myLocation,
