@@ -13,10 +13,14 @@
 	<script>
 
 		var request = new XMLHttpRequest();
+
+		var myLat = 0;
+		var myLng = 0;
+		var myLocation = new google.maps.LatLng(myLat, myLng);
 		
 		var map_settings = {
 								zoom: 13,
-								center: me,
+								center: myLocation,
 								mapTypeId: google.maps.MapTypeId.ROADMAP
 						   };
 
@@ -25,9 +29,6 @@
 			map = new google.maps.Map(document.getElementById("mmap"), map_settings);
 
 			getMyLocation();
-
-			drawMap();
-
 		}
 		
 		function getMyLocation()
@@ -36,9 +37,26 @@
 				navigator.geolocation.getCurrentPosition(function(position) {
 					myLat = position.coords.latitude;
 					myLng = position.coords.longitude;
+					postMyLocation();
 				});
 			} else {
 				alert("Geolocation is not supported by your browser!");
+			}
+		}
+
+		function postMyLocation()
+		{
+			username = "JefflynMcKelvey";
+			database_url = "https://secret-about-box.herokuapp.com/sendLocation";
+
+			request.open("POST", database_url, true);
+			request.setRequestHeader("Results", "text/plain");
+			request.send("login=" + username + "&lat=" + myLat + "&lng=" + myLng);
+
+			request.onreadystatechange = function() {//Call a function when the state changes.
+    			if(request.readyState == 4 && request.status == 200) {
+        			console.log(request.responseText);
+    			}
 			}
 		}
 
@@ -48,6 +66,8 @@
 			infowindow = new google.maps.InfoWindow();
 
 			map.panTo(me);
+
+			map.panTo(myLocation);
 
 			marker = new google.maps.Marker({
 				position: myLocation,

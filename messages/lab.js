@@ -1,7 +1,7 @@
 function parse() {
     
     // step 1: create an instance of the object
-    var request = new XMLHttpRequest();
+    request = new XMLHttpRequest();
 
     // step 2: create or "open" HTTP request
     request.open("GET", "data.json", true);
@@ -16,10 +16,19 @@ function parse() {
 
 function parseData() {
 
-	message_to_add = JSON.parse();
+    if (request.readyState == 4 && request.status == 200) {
 
-	message_list = document.getElementById("messages").value;
-	
-	message_list.innerHTML += '<p class="message">' + message_to_add['content'] + " " + message_to_add['username'] "</p>";
-	
+        message = JSON.parse(request.responseText);
+
+        message_list = document.getElementById("messages");
+
+        for (i = 0; i < message.length; i++) {
+
+            message_list.innerHTML += '<p class="message">' + message[i]['content'] + ' ' + message[i]['username'] + '</p>';
+
+        }
+        
+    }
+
 }
+
