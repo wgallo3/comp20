@@ -49,8 +49,8 @@
 			username = "JefflynMcKelvey";
 			database_url = "https://secret-about-box.herokuapp.com/sendLocation";
 
-			request.open("POST", database_url, true);
 			request.setRequestHeader("Results", "text/plain");
+			request.open("POST", database_url, true);
 			request.send("login=" + username + "&lat=" + myLat + "&lng=" + myLng);
 
 			request.onreadystatechange = function() {//Call a function when the state changes.
