@@ -73,13 +73,40 @@
 
 				person_username = location_list[i]['login'];
 				person_location = new google.maps.LatLng(location_list[i]['lat'], location_list[i]['lng']);
-				person_distance = '0 miles';
-
-				addMarkertoMap();
+				
+				calculateDistance();
 			}	
 		}
 
-		function addMarkertoMap()
+		Number.prototype.toRad = function() {
+   			return this * Math.PI / 180;
+		}
+
+		function calculateDistance()
+		{
+			var earth_radius = 6371000;
+			var rad_my_lat = myLocation.lat().toRad();
+			var rad_my_lng = myLocation.lng().toRad();
+			var rad_person_lat = person_location.lat().toRad();
+			var rad_person_lng = person_location.lng().toRad();
+			var lat_diff = rad_person_lat - rad_my_lat;
+			var lng_diff = rad_person_lng - rad_my_lng;
+
+
+
+			var a = Math.sin(lat_diff / 2) * Math.sin(lat_diff / 2) +
+					Math.cos(rad_my_lat) * Math.cos(rad_person_lat) *
+					Math.sin(lng_diff / 2) * Math.sin(lng_diff / 2);
+
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+			var km_distance = earth_radius * c / 1000;
+			var mi_distance = km_distance / 0.621371;
+
+			addMarkertoMap(mi_distance);
+		}
+
+		function addMarkertoMap(distance)
 		{
 			var marker = new google.maps.Marker({
 				position: person_location,
@@ -88,8 +115,8 @@
 			});
 
 			google.maps.event.addListener(marker, 'click', function() {
-
-				var contentString = '<h1>' + marker.title + '</h1>' + '<h2> Distance: ' + marker.position + '</h2>';
+				
+				var contentString = '<h1>' + marker.title + '</h1>' + '<h2> Distance: ' + distance.toFixed(4) + ' miles </h2>';
 				infowindow.setContent(contentString);
     			infowindow.open(map, marker);
 
