@@ -81,7 +81,8 @@
 		Number.prototype.toRad = function() {
    			return this * Math.PI / 180;
 		}
-
+		
+		// user the Haversine formula to calculate the distance between the user and each other person
 		function calculateDistance()
 		{
 			var earth_radius = 6371000;
@@ -91,8 +92,6 @@
 			var rad_person_lng = person_location.lng().toRad();
 			var lat_diff = rad_person_lat - rad_my_lat;
 			var lng_diff = rad_person_lng - rad_my_lng;
-
-
 
 			var a = Math.sin(lat_diff / 2) * Math.sin(lat_diff / 2) +
 					Math.cos(rad_my_lat) * Math.cos(rad_person_lat) *
@@ -108,15 +107,49 @@
 
 		function addMarkertoMap(distance)
 		{
-			var marker = new google.maps.Marker({
-				position: person_location,
-				map: map,
-				title: person_username
-			});
 
+			if (person_username == username) {
+
+				var marker = new google.maps.Marker({
+					position: person_location,
+					map: map,
+					icon: {
+				      	path: google.maps.SymbolPath.CIRCLE,
+				      	scale: 10,
+				      	strokeColor: 'red',
+				      	fillColor: 'red',
+				      	fillOpacity: 0.5,
+				      	strokeWeight: 0
+				    },
+					title: person_username
+				});
+
+			} else {
+
+				var marker = new google.maps.Marker({
+					position: person_location,
+					map: map,
+					icon: {
+				      	path: google.maps.SymbolPath.CIRCLE,
+				      	scale: 10,
+				      	strokeColor: 'black',
+				      	fillColor: 'black',
+				      	fillOpacity: 0.5,
+				      	strokeWeight: 0
+				    },
+					title: person_username
+				});
+
+			}
+			
 			google.maps.event.addListener(marker, 'click', function() {
 				
-				var contentString = '<h1>' + marker.title + '</h1>' + '<h2> Distance: ' + distance.toFixed(4) + ' miles </h2>';
+				if (marker.title == username) {
+					var contentString = '<h1> My Location </h1>';
+				} else {
+					var contentString = '<h1>' + marker.title + '</h1>' + '<h2> (' + distance.toFixed(4) + ' miles from me) </h2>';
+				}
+
 				infowindow.setContent(contentString);
     			infowindow.open(map, marker);
 
