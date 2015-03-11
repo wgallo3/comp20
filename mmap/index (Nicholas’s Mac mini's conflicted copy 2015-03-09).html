@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Marauder's Map</title>
+
+	<link rel="stylesheet" href="style.css" type="text/css" />
+
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&amp;libraries=places"></script>
+	
+	<script>
+
+		var request = new XMLHttpRequest();
+
+		var myLat = 0;
+		var myLng = 0;
+		var myLocation = new google.maps.LatLng(myLat, myLng);
+		
+		var map_settings = {
+								zoom: 13,
+								center: myLocation,
+								mapTypeId: google.maps.MapTypeId.ROADMAP
+						   };
+
+		function init()
+		{
+			map = new google.maps.Map(document.getElementById("mmap"), map_settings);
+
+			getMyLocation();
+
+			drawMap();
+
+		}
+		
+		function getMyLocation()
+		{
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(position) {
+					myLat = position.coords.latitude;
+					myLng = position.coords.longitude;
+				});
+
+				console.log(myLat);
+				console.log(myLng);
+				console.log(myLocation);
+			} else {
+				alert("Geolocation is not supported by your browser!");
+			}
+		}
+
+		function drawMap()
+		{	
+			myLocation = new google.maps.LatLng(myLat, myLng);
+			infowindow = new google.maps.InfoWindow();
+
+			console.log(myLat);
+			console.log(myLng);
+			console.log(myLocation);
+
+			map.panTo(myLocation);
+
+			marker = new google.maps.Marker({
+				position: myLocation,
+				title: "Nicholas"
+			});
+
+			marker.setMap(map);
+		}
+
+
+	</script>
+
+</head>
+
+<body onload="init()">
+	<div id="mmap"> </div>
+</body>
+
+</html>

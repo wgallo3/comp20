@@ -14,3 +14,14 @@ body {
 	height: 100%;
 	width: 100%;
 }
+
+h1 {
+	font-family: Helvetica;
+	font-size: 14px;
+
+}
+
+h2 {
+	font-family: Helvetica;
+	font-size: 12px;
+}
