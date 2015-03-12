@@ -85,7 +85,7 @@
 		// user the Haversine formula to calculate the distance between the user and each other person
 		function calculateDistance()
 		{
-			var earth_radius = 6371000;
+			var earth_radius = 6371;
 			var rad_my_lat = myLocation.lat().toRad();
 			var rad_my_lng = myLocation.lng().toRad();
 			var rad_person_lat = person_location.lat().toRad();
@@ -99,8 +99,8 @@
 
 			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-			var km_distance = earth_radius * c / 1000;
-			var mi_distance = km_distance / 0.621371;
+			var km_distance = earth_radius * c;
+			var mi_distance = km_distance * 0.621371;
 
 			addMarkertoMap(mi_distance);
 		}
