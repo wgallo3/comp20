@@ -141,7 +141,7 @@
 			google.maps.event.addListener(marker, 'click', function() {
 				
 				if (marker.title == username) {
-					var contentString = '<h1> My Location </h1>';
+					var contentString = '<h1>My Location</h1>';
 				} else {
 					var contentString = '<h1>' + marker.title + '</h1>' + '<h2> (' + distance.toFixed(4) + ' miles from me) </h2>';
 				}
