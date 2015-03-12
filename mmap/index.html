@@ -3,11 +3,10 @@
 <html>
 
 <head>
+
 	<meta charset="utf-8" />
 	<title>Marauder's Map</title>
-
 	<link rel="stylesheet" href="style.css" type="text/css" />
-
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&amp;libraries=places"> </script>
 
 	<script>
@@ -27,7 +26,6 @@
 		function init()
 		{
 			map = new google.maps.Map(document.getElementById("mmap"), map_settings);
-
 			getMyLocation();
 		}
 		
@@ -74,7 +72,7 @@
 				person_username = location_list[i]['login'];
 				person_location = new google.maps.LatLng(location_list[i]['lat'], location_list[i]['lng']);
 				
-				calculateDistance();
+				calculateHaversineDistance();
 			}	
 		}
 
@@ -82,8 +80,7 @@
    			return this * Math.PI / 180;
 		}
 		
-		// user the Haversine formula to calculate the distance between the user and each other person
-		function calculateDistance()
+		function calculateHaversineDistance()
 		{
 			var earth_radius = 6371;
 			var rad_my_lat = myLocation.lat().toRad();
@@ -107,7 +104,6 @@
 
 		function addMarkertoMap(distance)
 		{
-
 			if (person_username == username) {
 
 				var marker = new google.maps.Marker({
