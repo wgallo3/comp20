@@ -9,7 +9,8 @@
       $(document).ready(function() {
 
             $.each(localStorage, function(key, value) {
-                $("#log").prepend("<p> " + key + " - " + value + "</p>");
+                if (value == "C_LOG")
+                    $("#log").prepend("<p> " + key + "</p>");
             });
 
             $("#msg").keypress(function (e) {
@@ -17,7 +18,7 @@
                     curr_time = Date.now();
                     log_entry = $("#msg").val();
                     $("#log").prepend("<p> " + curr_time + " - " + log_entry + "</p>");
-                    localStorage.setItem(curr_time, log_entry);
+                    localStorage.setItem(curr_time + " - " + log_entry, "C_LOG");
                     $("#msg").val("");
                 }
             });
