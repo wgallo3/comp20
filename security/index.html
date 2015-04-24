@@ -95,11 +95,11 @@
         </p>
 
         <p>
-            Due to a misguided faith in the sanctity of users, this web application is open to a variety of attacks ranging from malicious attacks  cross site script (XSS) injections which could crash the user's browser, redirect to a malicious page, and more depending on the hacker's whim - to more benign, but still nonetheless inconvenient attacks - server-side injection attacks which could crash the datastore's server, forcing a manual restart on the part of the application owner before anyone could use the application again.
+            Due to a misguided faith in the sanctity of users, this web application is open to a variety of attacks ranging from malicious attacks - cross site script (XSS) injections which could crash the user's browser, redirect to a malicious page, and more depending on the hacker's whim - to attacks that are currently benign - server side script injections that reveal all of a user's information - that could eventually become malicious (if the scope of the application is expanded to hold private information).
         </p>
 
         <p>
-            Other security flaws harbor the potential to evolve from benign attacks to malicious attacks depending on the manner in which the site is utilized. Hackers can spoof their own locations as well as alter the locations of others in the datastore, actions that could quickly become problematic if the accuracy of the location data in the datastore becomes important.
+            Other security flaws allow hackers to spoof their own locations as well as alter the locations of others in the datastore, actions that could quickly become problematic if the accuracy of the location data in the datastore becomes important.
         </p>
 
         <p>
@@ -120,7 +120,7 @@
         </p>
 
         <p>
-            <u>Impact</u>: The attack can load new elements onto the server homepage (GET '/' API). These elements can vary from images to pop-ups to redirects to other potentially malicious website, making the homepage a magnet for malware and annoying ads.
+            <u>Impact</u>: The attack can load new elements onto the server homepage (GET '/' API). These elements can vary from images to pop-ups to redirects to other potentially malicious websites, making the homepage a magnet for malware and annoying ads.
         </p>
 
         <p>
@@ -132,7 +132,7 @@
         </p>
 
         <p>
-            Because the application blindly trusts user inputs, this makes it suceptible to cross-site scripting. Malicious users could inject snippets of Javascript or HTMl in place of logical entires in fields in the POST API. When the GET API is subsequently rendered, the malicious code would then be loaded onto the website as well, executing to the detriment of the site's user. 
+            Because the application blindly trusts user inputs, this makes it suceptible to cross-site scripting. Malicious users could inject snippets of Javascript or HTML in place of logical entires in fields in the POST API. When the GET API is subsequently rendered, the malicious code would then be loaded onto the website as well, executing to the detriment of the site's user. 
         </p>
 
         <p>
@@ -170,7 +170,7 @@
         </p>
 
         <p>
-            As a first line of defense, when rendering the GET '/' API page, we can parse all user entered data that we are about to display on the page. Upon encountering any &lt; or &gt; signs, we can replace them with their HTML equivalents - &amp;lt and &amp;lt - preventing any code snippets from executing. While browsers may treat
+            As a first line of defense, when rendering the GET '/' API page, we can parse all user entered data that we are about to display on the page. Upon encountering any &lt; or &gt; signs, we can replace them with their HTML equivalents - &amp;lt and &amp;gt - preventing any code snippets from executing. While browsers may treat
         </p>
 
         <div class="code"> &lt;title&gt; My Page Title &lt;/title&gt; </div> 
@@ -202,7 +202,7 @@
             var user_input; <br> <br>
             <div class="comment"> // filter out &lt;'s </div>
             var filtered_out_lt = user_input.replace("&lt;", "&amp;lt"); <br> <br>
-            <div class="comment"> // filter our remaining &gt;'s </div>
+            <div class="comment"> // filter out remaining &gt;'s </div>
             var filtered_out_lt_rt = filtered_out_lt.replace("&gt;", "&amp;gt"); <br>
         </div>
 
@@ -320,7 +320,7 @@
         </p>
 
         <p>
-            It is also worth noting that this attack could have been much worse than it actually was. Because the server query was programmed with the Mongo 'findOne' method instead of a blanket 'find' call, this vulnerability will only ever return the first user in the database. Had the blanket 'find' call been used, this vulnerability would have exposed all user information in the entire database.
+            It is also worth noting that this attack could have been much worse than it actually was. But, because the server query was programmed with the Mongo 'findOne' method instead of a blanket 'find' call, this vulnerability will only ever return the first user in the database. Had the blanket 'find' call been used, this vulnerability would have exposed all user information in the entire database.
         </p>
 
         <hr>
@@ -393,7 +393,7 @@
         </p>
 
         <p>
-            It is worth noting that as we attempt to reinforce the security of the site, removing malicious user's abilities to access the private information of other users, at its core, the Marauder's Map application and server run antithetical to this practice. After all, they provide a map designed <i> to track all of its users </i>. Just something to keep in mind.
+            It is worth noting that as we attempt to reinforce the security of the site, removing malicious user's abilities to access the private information of other users, at its core, the Marauder's Map application and server run antithetical to this practice. After all, they provide a map designed <i>to track all of its users</i>. Just something to keep in mind.
         </p>
 
         <hr>
