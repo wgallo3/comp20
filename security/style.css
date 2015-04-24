@@ -1,0 +1,131 @@
+h1 {
+
+    font-family: Helvetica;
+    font-size: 35px;
+    font-weight: 500;
+
+}
+
+h2  {
+
+    font-family: Helvetica;
+    font-size: 30px;
+    font-weight: 400;
+}
+
+h3 {
+
+    font-family: Helvetica;
+    font-size: 28px;
+    font-weight: 300;
+}
+
+h4 {
+
+    font-family: Helvetica;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+ol {
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+p {
+    
+    font-weight: 300;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    line-height: 24px;
+}
+
+br {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+a {
+
+    font-color: #1E90FF;
+    text-decoration: none;
+}
+
+img {
+
+    width: 80%;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.code {
+
+    background-color: #EBEBEB;
+    
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    font-family: Consolas;
+    font-size: 14px;
+
+    border-radius: 5px;
+
+}
+
+.code_text {
+
+    background-color: #EBEBEB;
+
+    font-family: Consolas, sans-serif;
+    font-size: 15px;
+
+    border-radius: 5px;
+
+}
+
+.caption {
+
+    font-family: Helvetica;
+    font-size: 14px;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    text-align: center;
+}
+
+#margin_wrapper {
+
+    padding-left: 2%;
+    padding-right: 2%;
+
+}
+
+tab {
+    padding-left:5em;
+}
+
+comment {
+    color: #808080;
+}
+
+.issue_section {
+
+    font-weight: 500;
+
+}

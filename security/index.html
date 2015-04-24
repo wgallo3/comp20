@@ -4,10 +4,418 @@
 
     <meta charset="utf-8" />
     <title> Assignment 4: Security &amp Privacy Assessment </title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>    
 
 </head>
 
 <html>
+
+    <div id="margin_wrapper">
+
+        <h1> Evaluating the Security of the Marauder's Map </h1>
+        <h4> Nicholas Yan, April 24th, 2015 </h4>
+
+        <h2> Introduction </h2>
+        <h4>
+            <p> 
+                This assessment details my hired investigation into the security of a two-part web application prepared by Aaron Kahen. 
+            </p>
+
+            <p>
+                Each half of the web application is detailed below:
+            </p>
+
+            <ol>
+                <li> 
+                    <div class="list_title"> A Marauder's Map </div>
+                    <p> 
+                        Prepared according to the specifications detailed by client in <a href="http://tuftsdev.github.io/WebProgramming/assignments/a2.html"> COMP 20 Assignment 2 </a>, the Marauder's Map is a product which determines a user's location via geolocation and posts it to an API which responds with the usernames and locations of all other users currently in the database. The product then displays the locations of all people in the datastore (including the user) on a map. 
+                    </p> 
+                </li>
+                <li> 
+                    <div class="list_title"> 
+                        An Accompanying Server-Side Application 
+                    </div>
+                    <p> 
+                        The implementation of the aforementioned API and datastore, prepared to client requirements outlined in <a href="http://tuftsdev.github.io/WebProgramming/assignments/a3.html"> COMP 20 Assignment 3 </a>. The API offers the posting of user locations, the retrieval of a given user's location (or all users' locations if a succesful user post location is made), and a web interface for observing all current locations of users as well as the time they last checked in.
+                    </p>
+                </li>
+            </ol>
+
+            <p>
+                Cumulatively, the products combine to create an application akin to the namesake of this project: the Marauder's Map (of the popular Harry Potter novels).
+            </p>
+
+            <p> 
+                This report seeks to answer two key questions about this product:
+                <ol>
+                    <li>Is it ready to be deployed? </li>
+                    <br>
+                    <li> If not, what are its potential security vulnerabilities? What can we do to fix these? </li>
+                </ol>
+            </p>
+
+        </h4>
+
+        <h2> Methodology </h2>
+
+        <h4>
+            <p>
+                The product was tested in the following steps:
+                <ol>
+                    <li>
+                        Attacks were first conducted while treating the product as a "black box", simulating a hacker's blind attempts at clubbing the product into submission.
+                    </li>
+                    <br>
+                    <li>
+                        Then, after battering the product exhaustively, a peep inside the "black box" was taken. After, sifting through the product's source code, more nuanced, precise attacks on certain mechanisms were taken.
+                    </li>
+                </ol>
+            </p>
+
+            <p> 
+                The tools used to conduct testing were cURL, the <a href="https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm?hl=en"> POSTMAN Chrome Extension </a> (used to display the results intially tested in cURL), and <a href="https://addons.mozilla.org/En-us/firefox/addon/tamper-data/">Tamper Data</a>, a Firefox extension that allows users to "view and modify HTTP/HTTPS headers and post parameters."
+            </p>
+        </h4>
+
+        <h2> Abstract of Findings </h2>
+
+        <h4>
+            <p> 
+                Over the course of testing, numerous security vulnerabilities in the application were discovered. As such, <strong> the application is not recommended for public deployment. </strong>
+            </p>
+
+            <p>
+                Due to a misguided faith in the sanctity of users, this web application is open to a variety of attacks ranging from malicious attacks  cross site script (XSS) injections which could crash the user's browser, redirect to a malicious page, and more depending on the hacker's whim - to more benign, but still nonetheless inconvenient attacks - server-side injection attacks which could crash the datastore's server, forcing a manual restart on the part of the application owner before anyone could use the application again.
+            </p>
+
+            <p>
+                Other security flaws harbor the potential to evolve from benign attacks to malicious attacks depending on the manner in which the site is utilized. Hackers can spoof their own locations as well as alter the locations of others in the datastore, actions that could quickly become problematic if the accuracy of the location data in the datastore becomes important.
+            </p>
+
+            <p>
+                These errors are not without their solutions, however. The next section details our findings and some potential remedies.
+            </p>
+        </h4>
+
+        <h2> Issues Found </h2>
+
+        <h4>
+            The issues are presented in order of security risk, from high to low.
+        </h4>
+
+        <hr>
+        <h3> 1) XSS Injections <h3>
+
+        <h4> 
+            <p>
+                <text class="issue_section"> Risk Level: </text> High 
+            </p> 
+
+            <p>
+                <text class="issue_section"> Impact: </text> The attack can load new elements onto the server homepage (GET '/' API). These elements can vary from images to pop-ups to redirects to other potentially malicious website, making the homepage a magnet for malware and annoying ads.
+            </p>
+
+            <p>
+                <text class="issue_section"> Location: </text> the POST API
+            </p>
+
+            <p class="issue_section">
+                Description:
+            </p>
+
+            <p>
+                Because the application blindly trusts user inputs, this makes it suceptible to cross-site scripting. Malicious users could inject snippets of Javascript or HTMl in place of logical entires in fields in the POST API. When the GET API is subsequently rendered, the malicious code would then be loaded onto the website as well, executing to the detriment of the site's user. 
+            </p>
+
+            <p>
+                For example, let's assume we enter three simple CURL commands:
+            </p>
+
+            <div class="code"> 
+                curl --data "&amp;login=&lt;body onload=alert('h@ck3d!')&gt;&lt;/body&gt;&amp;lat=0&amp;lng=0" http://localhost:5000/sendLocation
+            </div>
+
+            <div class="code"> 
+                curl --data "&amp;login=&lt;title&gt;'#H@CK3D'&lt;/title&gt;&amp;lat=0&amp;lng=0" http://localhost:5000/sendLocation
+            </div>
+
+            <div class="code"> 
+                curl --data "&amp;login=&lt;img src="http://i2.kym-cdn.com/photos/images/facebook/000/030/403/YouMad.jpg"&gt;&lt;/img&gt;&amp;lat=0&amp;lng=0" http://localhost:5000/sendLocation
+            </div>
+
+            <p>
+                The following is the result:
+            </p>
+
+            <img src='xss_hack.png'> </img>
+
+            <div class="caption"> 
+                Image 1: The ghastly remains of a once respectable website, lost at the hands of a few XSS injections.
+            </div>
+
+            <p class="issue_section">
+                Resolution: 
+            </p>
+
+            <p>
+                We need a method that can somehow filter out code - or at the very least, prevent it from executing. A few techniques immediately spring to mind.
+            </p>
+
+            <p>
+                As a first line of defense, when rendering the GET '/' API page, we can parse all user entered data that we are about to display on the page. Upon encountering any &lt; or &gt; signs, we can replace them with their HTML equivalents - &amp;lt and &amp;lt - preventing any code snippets from executing. While browsers may treat
+            </p>
+
+            <div class="code"> &lt;title&gt; My Page Title &lt;/title&gt; </div> 
+
+            <p>
+                as code,
+            </p>
+
+            <div class="code"> &amp;lttitle&amp;gt My Page Title &amp;lt/title&amp;gt </div>
+
+            <p>
+                will certainly <i> not </i> be interpreted as code.
+            </p>
+
+            <p> 
+                This will resolve the initial issue presented with the GET '/' API.
+            </p>
+
+            <p>
+                But what if other people use other forms of the GET API? What if they want to list the data on their websites? We should try to protect them too. This requires another solution; after all, we can't just force our way into their webpage and escape characters for them! To combat this problem, we have to cleanse the source of the problem (and their webpages): the data stored in the server.
+            </p>
+
+            <p>
+                One method of cleaning entries to the database is simply to bar certain characters - namely &lt; and &gt; - from being stored in the database. This would require a string parsing that filtered out these characters from all user inputs. For this most secure solution, this script would have to run on the database side - a necessary middle man guarding the database from user input. Such a scipt in Javascript might look like:
+            <p>
+
+            <div class="code">
+                <comment> // the user input </comment> <br>
+                var user_input; <br> <br>
+                <comment> // filter out &lt;'s </comment> <br>
+                var filtered_out_lt = user_input.replace("&lt;", "&amp;lt"); <br> <br>
+                <comment> // filter our remaining &rt;'s </comment> <br>
+                var filtered_out_lt_rt = filtered_out_lt.replace("&rt;", "&amp;rt"); <br>
+            </div>
+
+            <p>
+                To retroactively remove flaw entries that may have been stored in the past - before this security review - another easy function that traverses each item in the database, retrieves its original fields, filters using the script above, and then updates the entry could be written and utilized.
+            </p>
+
+            <p>
+                With a redunant set of security infrastructure in place for guarding against XSS injections in the past and future, we can now move on to other security risks.
+            </p>
+
+        </h4>
+
+        <hr>
+        <h3> 
+            2) MongoDB Request Injection Attack 
+        </h3>
+
+        <h4>
+            <p>
+                <text class="issue_section"> Risk Level: </text> Medium
+            </p>
+
+            <p>
+                <text class="issue_section"> Impact: </text> User privacy - the attack returns all of fields stored for the first user in the datastore. 
+            </p>
+
+            <p>
+                <text class="issue_section"> Location: </text> the GET API
+            </p>
+
+            <p class="issue_section">
+                Description: 
+            </p>
+
+            <p>
+                After sifting through the code written for the server-side implementation of the Marauder's Map, I noticed that there was no parsing done on input to the GET /location.json API; rather, the server simply took the input parameters and blindly queried the Mongo database with them. As such, I conducted an attack which took advantage of this fact.
+            </p>
+
+            <p>
+                A simple GET request for 'login[$ne]=' which should have failed with invalid parameters instead succeeded, returning all of the information for the first user in the datastore: GlendaSmith.
+            </p>
+
+            <img src='mongo_injection.png'> </img>
+
+            <div class="caption"> 
+                Image 2: A GET request for 'login[$ne]=' returns the first entry in the datastore.
+            </div>
+
+            <p>
+                A Helpful Side Note: the snippet of code <text class="code_text"> login[$ne]= </text> executes as the GET API queries the Mongo database with the unsanatized input. Rather than the server searching for a login the matches a particular name, the <text class="code_text"> [$ne] </text> portion of the request instead forces the server to search for logins that <i> don't match </i> a given string - in this attack, the empty string.
+            </p>
+
+            <p class="issue_section">
+                Resolution: 
+            </p>
+
+            <p>
+                Resolving this problem is rather simple - sanatizing the GET API's input - but highlights a larger big idea. 
+            </p>
+
+            <p>
+                Earlier, we saw the necessity of warding off XSS injections by santizing the POST API's input. Here again, we see vulnerabilities when other forms of input are not santized. Overall, when creating any web application, it is never wise to trust the user; all instances of input should be sanatized to best protect against vulnerabilities.
+            </p>
+
+            <p>
+                While the earlier fix was to filter out &lt; and &gt; symbols, here, we must filter out the $ character. There are two possible approaches to doing so.
+            </p>
+
+            <p>
+                The first is to keep the parsing functions seperate, filtering out &lt; and &gt; in the POST API and then writing a seperate function (see below for an example) to parse the GET API's input.
+            </p>
+
+            <div class="code"> 
+                <comment> // the user input </comment> <br>
+                var user_input; <br> <br>
+                <comment> // filter out $'s </comment> <br>
+                var filtered_out_lt = user_input.replace("$", ""); <br>
+            </div>
+
+            <p>
+                Or, for more reusable code, we could parse all input through one function that filtered out characters such as &lt;, &gt;, and $. For a more offensive rather than defensive approach, we could even rework this function so that it only allowed through alphanumeric characters, banning all special characters.
+            </p>
+
+            <div class="code"> 
+                <comment> // the user input </comment> <br>
+                var user_input; <br>
+                <br>
+                <comment> // construct filter </comment> <br>
+                var regex_filter = /^[A-Za-z0-9]+$/; <br>
+                <br>
+                <comment> // test user input </comment> <br>
+                if(!regex_filter.test(user_input)) <br>
+                    <tab> <comment> // discard input </comment> </tab> <br>
+                else <br>
+                    <tab> <comment> // store input </comment> </tab> <br> <br>
+                <comment> // Help from: http://stackoverflow.com/questions/14336195/how-to-prevent-non-alphanumeric-input-in-javascript </comment>
+            </div>
+
+            <p>
+                Regardless or the method of resolution, a key guideline to any future expansions of the application remains: always santize any form of input! 
+            </p>
+
+            <p>
+                (Another way to combat this problem would be to modify the return of the GET API. Rather than just returning all of the information associated with an entry in the database, we could just return the relevant, public fields - login, latitude, longitude.)
+            </p>
+
+            <p class="issue_section">
+                Additional Notes:
+            </p>
+
+            <p>
+                Though this isn't particularly dangerous now - after all, all information in the datastore is publically accessible through the GET '/' API already - this poses a risk in case the client ever decides to host additional, sensitive and prive user information in the datastore.
+            </p>
+
+            <p>
+                The attack also violates the fundamental concept of the GET API: it should only return an entry if a valid login is presented.
+            </p>
+
+            <p>
+                It is also worth noting that this attack could have been much worse than it actually was. Because the server query was programmed with the Mongo 'findOne' method instead of a blanket 'find' call, this vulnerability will only ever return the first user in the database. Had the blanket 'find' call been used, this vulnerability would have exposed all user information in the entire database.
+            </p>
+        </h4>
+
+        <hr>
+        <h3> 
+            3) Location Spoofing 
+        <h3>
+
+        <h4>
+            <p>
+                <text class="issue_section"> Risk Level: </text> Low
+            </p>
+
+            <p>
+                <text class="issue_section"> Impact: </text> Inaccurate user location information.
+            </p>
+
+            <p>
+                <text class="issue_section"> Location: </text> the Marauder's Map homepage (index.html)
+            </p>
+            
+            <p class="issue_section">
+                Description: 
+            </p>
+
+            <p>
+                Because the user submits their own location (via the Marauder's Map homepage's use of geolocation), this opens the process to tampering. Using a simple extension such as Tamper Data for Firefox, we could lead the server to believe we were halfway around the world in Paris while we sit here comfortable in Boston. (Or we could even just use cURL to post an erroneous location to the server directly using the POST API.)
+            </p>
+
+            <p>
+                Futhermore, after the returned map lists all of the user ID's of individuals in the datastore, we would be able to then go in and modify each of these entries using the same technique. When Tampering the POST data, we could replace our username with these other usernames, updating their locations to false locations as well. (Or again, we could just use cURL to post erreneous locations for these users.)
+            </p>
+
+            <img src="location_spoof.png"> </img>
+
+            <div class="caption"> 
+                Image 3: Here we post that we are at latitude 0 degrees, longitude 0 degrees - in the middle of the ocean off the coast of Africa.
+            </div>
+
+            <img src="ocean_loc.png"> </img>
+
+            <div class="caption"> 
+                Image 4: And here we are! (I wasn't actually on my computer in the middle of the ocean.)
+            </div>
+
+            </p>
+
+            <p class="issue_section">
+                Resolution: 
+            </p>
+
+            <p>
+                Resolving the spoofing of others' locations is simple. In addition to giving each individual participating in this project a username, give them a secret or password. When using the POST API, the server could check each username against its secret, ensuring that the post was from a valid source. (The method of comparison would likely be through some salting and then hashing.)
+            </p>
+
+            <p>
+                Resolving the spoofing of the user's location, however, is signficantly harder. After all, the user would know their own key and whatever geolocation service we use has to operate on the client side - there's no way to magically tell from the comfort of our server where all the users are. 
+            </p>
+
+            <p>
+                I'm honestly not sure if there is a solution to this problem. Relying on some comparison between the user's produced geolocation and the user's IP address to determine the validity of data initially seems promising, but then again spoofing an IP address by using a proxy presents a relatively easy workaround.
+            </p>
+
+            <p>
+                The application could also request a picture of the user's location and compare that to the views available from Google Street View. However, this again could be faked; the user could just take a photo of another photo of the spoofed location.
+            </p>
+
+            <p>
+                Perhaps the best advice on this problem may just be best to trust each user's location with a grain of salt - a mantra that undermines the overall tenets and utility of the Marauder's Map application, reducing it to a novel application with no real utility.
+            </p>
+
+            <p class="issue_section">
+                Additional Notes:
+            </p>
+
+            <p>
+                It is worth noting that as we attempt to reinforce the security of the site, removing malicious user's abilities to access the private information of other users, at its core, the Marauder's Map application and server run antithetical to this practice. After all, they provide a map designed <i> to track all of its users </i>. Just something to keep in mind.
+            </p>
+
+        </h4>
+        <hr>
+
+        <h2> Conclusion </h2>
+
+        <h4>
+
+            <p>
+                Due to the previously discussed security vulnerabilities, I have concluded that the site is <strong> not ready for deployment </strong>.
+            </p>
+
+            <p>
+                Luckily all of the fixes above are quite simple and present additional guidelines to keep in mind if the scope of the project and its facilities is expanded.
+            </p>
+
+            <p>
+                Even after these issues are resolved, however, a number of other issues have been raised that question the overall utility of the application. Because users can supply the server with inaccurate data, the crux of the application's utility is placed in question. Though it may be useful as a coding exercise, the application unfortunately holds little real world utility.
+            </p>
+
+    </div>
 
 </html>
