@@ -300,12 +300,20 @@
                 Regardless or the method of resolution, a key guideline to any future expansions of the application remains: always santize any form of input! 
             </p>
 
+            <p>
+                (Another way to combat this problem would be to modify the return of the GET API. Rather than just returning all of the information associated with an entry in the database, we could just return the relevant, public fields - login, latitude, longitude.)
+            </p>
+
             <p class="issue_section">
                 Additional Notes:
             </p>
 
             <p>
                 Though this isn't particularly dangerous now - after all, all information in the datastore is publically accessible through the GET '/' API already - this poses a risk in case the client ever decides to host additional, sensitive and prive user information in the datastore.
+            </p>
+
+            <p>
+                The attack also violates the fundamental concept of the GET API: it should only return an entry if a valid login is presented.
             </p>
 
             <p>
@@ -336,11 +344,25 @@
             </p>
 
             <p>
-                Because the user submits their own location (via the Marauder's Map homepage's use of geolocation), this opens the process to tampering. Using a simple extension such as Tamper Data for Firefox, we could lead the server to believe we were halfway around the world in Paris while we sit here comfortable in Boston.
+                Because the user submits their own location (via the Marauder's Map homepage's use of geolocation), this opens the process to tampering. Using a simple extension such as Tamper Data for Firefox, we could lead the server to believe we were halfway around the world in Paris while we sit here comfortable in Boston. (Or we could even just use cURL to post an erroneous location to the server directly using the POST API.)
             </p>
 
             <p>
-                Futhermore, after the returned map lists all of the user ID's of individuals in the datastore, we would be able to then go in and modify each of these entries using the same technique. when Tampering the POST data, we could replace our username with these other usernames, updating their locations to false locations as well.
+                Futhermore, after the returned map lists all of the user ID's of individuals in the datastore, we would be able to then go in and modify each of these entries using the same technique. When Tampering the POST data, we could replace our username with these other usernames, updating their locations to false locations as well. (Or again, we could just use cURL to post erreneous locations for these users.)
+            </p>
+
+            <img src="location_spoof.png"> </img>
+
+            <div class="caption"> 
+                Image 3: Here we post that we are at latitude 0 degrees, longitude 0 degrees - in the middle of the ocean off the coast of Africa.
+            </div>
+
+            <img src="ocean_loc.png"> </img>
+
+            <div class="caption"> 
+                Image 4: And here we are! (I wasn't actually on my computer in the middle of the ocean.)
+            </div>
+
             </p>
 
             <p class="issue_section">
@@ -356,7 +378,11 @@
             </p>
 
             <p>
-                I'm honestly not sure if there is a solution to this problem. Relying on some comparison between the user's produced geolocation and the user's IP address to determine the validity of data initially seems promising, but then again spoofing an IP address by using a proxy presents a relatively easy workaround. 
+                I'm honestly not sure if there is a solution to this problem. Relying on some comparison between the user's produced geolocation and the user's IP address to determine the validity of data initially seems promising, but then again spoofing an IP address by using a proxy presents a relatively easy workaround.
+            </p>
+
+            <p>
+                The application could also request a picture of the user's location and compare that to the views available from Google Street View. However, this again could be faked; the user could just take a photo of another photo of the spoofed location.
             </p>
 
             <p>
